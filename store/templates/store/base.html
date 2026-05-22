@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}ofazyvybez Streetwears Store{% endblock %}</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{% static 'store/img/logo.png' %}">
     <!-- Modern Typography: Outfit & Space Grotesk -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,8 +32,12 @@
             </button>
 
             <!-- Brand Logo -->
-            <a href="{% url 'home' %}" class="logo">
-                OFAZY<span class="accent-text">VYBEZ</span> <span class="logo-sub">STREETWEARS</span>
+            <a href="{% url 'home' %}" class="logo" style="display: flex; align-items: center; gap: 8px;">
+                <img src="{% static 'store/img/logo.png' %}" alt="OFAZYVYBEZ Logo" style="height: 36px; width: auto; object-fit: contain; border-radius: 4px;">
+                <div style="display: flex; flex-direction: column; line-height: 1.1;">
+                    <span>OFAZY<span class="accent-text">VYBEZ</span></span>
+                    <span class="logo-sub" style="margin-left: 0;">STREETWEARS</span>
+                </div>
             </a>
 
             <!-- Desktop Navigation -->
