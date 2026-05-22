@@ -1,0 +1,14 @@
+{
+    "builds": [
+        {
+            "src": "ofazy_store/wsgi.py",
+            "use": "@vercel/python"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "ofazy_store/wsgi.py"
+        }
+    ]
+}

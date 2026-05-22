@@ -1,0 +1,140 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block title %}Shopping Bag — OFAZYVYBEZ STREETWEARS{% endblock %}
+
+{% block content %}
+<div class="cart-page-wrapper">
+    
+    <h1 class="cart-title">Your Bag</h1>
+
+    {% if cart_items %}
+    <div class="cart-grid-layout">
+        
+        <!-- Left Panel: Cart Items list -->
+        <div class="cart-items-panel">
+            {% for item in cart_items %}
+            <div class="cart-item-row" id="row-{{ item.key }}">
+                
+                <!-- Image -->
+                <div class="cart-item-img">
+                    {% if item.product %}
+                        <img src="{{ item.product.image_url }}" alt="{{ item.name }}">
+                    {% else %}
+                        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=300" alt="Placeholder image">
+                    {% endif %}
+                </div>
+
+                <!-- Detail description -->
+                <div class="cart-item-details">
+                    <span class="cart-item-name">{{ item.name }}</span>
+                    
+                    <div class="cart-item-meta">
+                        {% if item.size %}
+                            <span>Size: <strong>{{ item.size }}</strong></span>
+                        {% endif %}
+                        {% if item.color %}
+                            <span>Colorway: <strong>{{ item.color }}</strong></span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="cart-item-price">₦{{ item.price }}</div>
+                </div>
+
+                <!-- Quantity controls & remove -->
+                <div class="cart-item-right">
+                    
+                    <!-- Remove Trash trigger -->
+                    <button class="cart-item-remove" data-item-key="{{ item.key }}" title="Remove item">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+
+                    <!-- AJAX quantity switcher -->
+                    <div class="qty-adjust-wrapper" style="transform: scale(0.9); margin-top: 8px;">
+                        <button type="button" class="qty-btn cart-qty-btn" data-item-key="{{ item.key }}" data-action="decrease">
+                            <i class="fa-solid fa-minus"></i>
+                        </button>
+                        <span class="qty-input-box" id="qty-{{ item.key }}" style="display: flex; align-items: center; justify-content: center; background: none; font-family: var(--font-heading); font-weight: 600;">
+                            {{ item.quantity }}
+                        </span>
+                        <button type="button" class="qty-btn cart-qty-btn" data-item-key="{{ item.key }}" data-action="increase">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Right Panel: Financial totals & checkout forms -->
+        <div class="cart-checkout-panel">
+            
+            <div class="checkout-summary-section">
+                <h3 class="summary-title">Order Summary</h3>
+                
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span id="cartSubtotal">₦{{ cart_total|floatformat:2 }}</span>
+                </div>
+                <div class="summary-row">
+                    <span>Shipping</span>
+                    <span style="color: var(--accent-neon-green); font-weight: 600;">FREE</span>
+                </div>
+                
+                <div class="summary-row total">
+                    <span>Total</span>
+                    <span id="cartTotal">₦{{ cart_total|floatformat:2 }}</span>
+                </div>
+            </div>
+
+            <!-- Customer details fields -->
+            <form id="checkoutForm">
+                <h3 class="form-title">Delivery & Billing</h3>
+                
+                <div class="input-field-group">
+                    <label for="customerName">Full Name</label>
+                    <input type="text" id="customerName" placeholder="e.g. Samuel Wilson" required>
+                </div>
+
+                <div class="input-field-group">
+                    <label for="customerEmail">Email Address</label>
+                    <input type="email" id="customerEmail" placeholder="e.g. sam@gmail.com" required>
+                </div>
+
+                <div class="input-field-group">
+                    <label for="customerPhone">WhatsApp Phone Number</label>
+                    <input type="tel" id="customerPhone" placeholder="e.g. +1234567890" required>
+                </div>
+
+                <div class="input-field-group">
+                    <label for="customerAddress">Shipping & Delivery Address</label>
+                    <textarea id="customerAddress" placeholder="e.g. House 4, Admiralty Way, Lekki Phase 1, Lagos, Nigeria" rows="3" required style="resize: none;"></textarea>
+                </div>
+
+                <!-- Primary Trigger button -->
+                <button type="submit" class="checkout-action-btn">
+                    <i class="fa-brands fa-whatsapp"></i> CHECKOUT WITH WHATSAPP
+                </button>
+            </form>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-top: 16px; line-height: 1.4;">
+                <i class="fa-solid fa-shield-halved"></i> Your order details are secured in our database. We compile a pre-formatted message to open in your WhatsApp chat instantly. No credit card required.
+            </p>
+
+        </div>
+
+    </div>
+    {% else %}
+    <!-- Empty Cart state -->
+    <div class="empty-catalog-state" style="padding: 100px 20px;">
+        <div class="empty-icon"><i class="fa-solid fa-bag-shopping" style="font-size: 4rem;"></i></div>
+        <h3>Your bag is empty</h3>
+        <p>You haven't added any ofazyvybez streetwear pieces to your shopping bag yet. Check out the latest streetwear drops now!</p>
+        <a href="{% url 'shop' %}" class="cta-button">BROWSE THE COLLECTION</a>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

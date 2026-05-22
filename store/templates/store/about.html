@@ -1,0 +1,25 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block title %}Brand Philosophy — OFAZYVYBEZ{% endblock %}
+
+{% block content %}
+<div class="product-detail-wrapper" style="max-width: 800px; margin: 80px auto; text-align: center;">
+    <span class="detail-category" style="letter-spacing: 0.25em;">ABOUT THE BRAND</span>
+    <h1 class="detail-title" style="font-size: 3rem; margin-top: 10px; margin-bottom: 40px; letter-spacing: -0.02em;">OFAZYVYBEZ</h1>
+    
+    <div style="line-height: 1.8; color: var(--text-secondary); font-size: 1.1rem; text-align: justify; margin-bottom: 40px;">
+        <p style="margin-bottom: 24px;">
+            OFAZYVYBEZ is a premium streetwear label founded in 2026. Born from the synergy between high-fashion styling and active streetculture, we design heavyweight graphic garments, custom-knit utility polos, and premium split-toe suede loafers.
+        </p>
+        <p style="margin-bottom: 24px;">
+            Every single piece is constructed in limited quantities and released in seasonal drops. We do not mass-produce, ensuring that each garment you own retains its exclusive premium feel.
+        </p>
+        <p>
+            By combining high-quality construction with simplified payment through our integrated WhatsApp checkout system, we bring early-drop visual excellence directly to your wardrobe.
+        </p>
+    </div>
+
+    <a href="{% url 'shop' %}" class="cta-button" style="display: inline-block; padding: 16px 40px;">EXPLORE THE ARCHIVE</a>
+</div>
+{% endblock %}

@@ -1,0 +1,322 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block title %}Staff Controls Dashboard — OFAZYVYBEZ{% endblock %}
+
+{% block content %}
+<div class="dashboard-wrapper">
+    
+    <!-- Dashboard Header -->
+    <div class="dashboard-header">
+        <h1 class="dashboard-title">
+            Staff controls
+            <span>/ live analytics dashboard</span>
+        </h1>
+        
+        <div class="dashboard-user-meta" style="font-size: 0.9rem; font-weight: 500; color: var(--text-secondary);">
+            Logged in as <strong style="color: white; border-bottom: 2px solid var(--accent-color); padding-bottom: 2px;">{{ user.username }}</strong>
+        </div>
+    </div>
+
+    <!-- Stat KPI Cards Grid -->
+    <div class="stat-cards-grid">
+        <!-- Revenue Card -->
+        <div class="stat-card">
+            <div class="stat-card-left">
+                <span class="stat-card-title">Delivered Revenue</span>
+                <span class="stat-card-val">₦{{ total_sales|floatformat:2 }}</span>
+            </div>
+            <div class="stat-card-icon" style="background-color: rgba(57, 255, 20, 0.1); color: var(--accent-neon-green);">
+                <i class="fa-solid fa-sack-dollar"></i>
+            </div>
+        </div>
+
+        <!-- Pending Revenue Card -->
+        <div class="stat-card">
+            <div class="stat-card-left">
+                <span class="stat-card-title">Pending Revenue</span>
+                <span class="stat-card-val">₦{{ pending_sales|floatformat:2 }}</span>
+            </div>
+            <div class="stat-card-icon">
+                <i class="fa-solid fa-hourglass-half"></i>
+            </div>
+        </div>
+
+        <!-- Total Orders Card -->
+        <div class="stat-card">
+            <div class="stat-card-left">
+                <span class="stat-card-title">Total Orders</span>
+                <span class="stat-card-val">{{ total_orders_count }}</span>
+            </div>
+            <div class="stat-card-icon" style="background-color: rgba(0, 207, 200, 0.1); color: #00cfc8;">
+                <i class="fa-solid fa-truck-ramp-box"></i>
+            </div>
+        </div>
+
+        <!-- Active Customers Card -->
+        <div class="stat-card">
+            <div class="stat-card-left">
+                <span class="stat-card-title">Unique Customers</span>
+                <span class="stat-card-val">{{ active_customers_count }}</span>
+            </div>
+            <div class="stat-card-icon" style="background-color: rgba(153, 102, 255, 0.1); color: #9966ff;">
+                <i class="fa-solid fa-users"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Staff Management Quick Shortcuts -->
+    <div class="dashboard-block" style="padding: 20px; margin-bottom: 30px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+            <div>
+                <h3 style="font-family: var(--font-heading); font-size: 1rem; text-transform: uppercase; margin-bottom: 4px; color: white;"><i class="fa-solid fa-screwdriver-wrench"></i> Inventory & Catalog Controls</h3>
+                <p style="font-size: 0.8rem; color: var(--text-secondary); margin: 0;">Add new drop products, modify stock volumes, manage categories and orders directly.</p>
+            </div>
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                <a href="/admin/store/product/add/" class="cta-button" target="_blank" style="padding: 10px 18px; font-size: 0.75rem; background-color: var(--accent-color); border: none; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;"><i class="fa-solid fa-plus"></i> ADD PRODUCT</a>
+                <a href="/admin/store/product/" class="cta-button" target="_blank" style="padding: 10px 18px; font-size: 0.75rem; background-color: transparent; border: 1px solid var(--border-color); font-weight: 700; color: white; display: inline-flex; align-items: center; gap: 6px;"><i class="fa-solid fa-cubes"></i> EDIT STOCKS & PRODUCTS</a>
+                <a href="/admin/store/category/" class="cta-button" target="_blank" style="padding: 10px 18px; font-size: 0.75rem; background-color: transparent; border: 1px solid var(--border-color); font-weight: 700; color: white; display: inline-flex; align-items: center; gap: 6px;"><i class="fa-solid fa-tags"></i> MANAGE CATEGORIES</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Split Main Layout -->
+    <div class="dashboard-main-split">
+        
+        <!-- Left: Recent Orders list -->
+        <div class="dashboard-left-column">
+            
+            <div class="dashboard-block">
+                <div class="block-header">
+                    <h3 class="block-title">Recent Orders</h3>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 500;">Showing last 10 entries</span>
+                </div>
+
+                <div class="table-responsive-container">
+                    {% if orders %}
+                    <table class="admin-data-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer Details</th>
+                                <th>Shipping Address</th>
+                                <th>Order Value</th>
+                                <th>Date & Time</th>
+                                <th>WhatsApp</th>
+                                <th>Status Control</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders %}
+                            <tr id="order-row-{{ order.id }}">
+                                
+                                <!-- ID -->
+                                <td style="font-family: var(--font-heading); font-weight: 700;">#{{ order.id }}</td>
+                                
+                                <!-- Customer -->
+                                <td>
+                                    <div style="font-weight: 600;">{{ order.customer_name }}</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-secondary);">{{ order.customer_phone }}</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-muted);">{{ order.customer_email }}</div>
+                                    <div style="margin-top: 6px; padding: 4px 8px; background: rgba(255,255,255,0.03); border-radius: 4px; border-left: 2px solid var(--accent-color); font-size: 0.75rem;">
+                                        <strong style="color: var(--text-secondary);">Items:</strong>
+                                        <ul style="margin: 2px 0 0 0; padding-left: 14px; color: white;">
+                                            {% for item in order.items.all %}
+                                            <li>{{ item.quantity }}x {{ item.product.name }} ({{ item.selected_size }}/{{ item.selected_color }})</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </td>
+
+                                <!-- Shipping Address -->
+                                <td style="font-size: 0.8rem; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="{{ order.shipping_address }}">
+                                    {{ order.shipping_address|default:"Not specified" }}
+                                </td>
+                                
+                                <!-- Price -->
+                                <td style="font-family: var(--font-heading); font-weight: 700;">₦{{ order.total_price }}</td>
+                                
+                                <!-- Date -->
+                                <td style="font-size: 0.8rem; color: var(--text-secondary);">{{ order.created_at|date:"M d, Y" }}<br>{{ order.created_at|date:"H:i" }}</td>
+                                
+                                <!-- Whatsapp status icon -->
+                                <td>
+                                    {% if order.whatsapp_sent %}
+                                        <span style="color: var(--accent-neon-green);" title="Checkout URL compiled and redirected"><i class="fa-solid fa-circle-check"></i> Redirected</span>
+                                    {% else %}
+                                        <span style="color: var(--text-muted);" title="Manual checkout"><i class="fa-solid fa-circle"></i> Manual</span>
+                                    {% endif %}
+                                </td>
+
+                                <!-- Status interactive drop select -->
+                                <td>
+                                    <select class="status-select-btn" onchange="updateOrderStatus({{ order.id }}, this.value)">
+                                        <option value="Pending" {% if order.status == 'Pending' %}selected{% endif %}>Pending</option>
+                                        <option value="Confirmed" {% if order.status == 'Confirmed' %}selected{% endif %}>Confirmed</option>
+                                        <option value="Shipped" {% if order.status == 'Shipped' %}selected{% endif %}>Shipped</option>
+                                        <option value="Delivered" {% if order.status == 'Delivered' %}selected{% endif %}>Delivered</option>
+                                    </select>
+                                </td>
+
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+                        <i class="fa-solid fa-ban" style="font-size: 2rem; margin-bottom: 12px;"></i>
+                        <p>No orders registered in the system yet.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right: Low Stock warnings & Popular items -->
+        <div class="dashboard-right-column">
+            
+            <!-- Stock alert warnings list -->
+            <div class="dashboard-block">
+                <div class="block-header">
+                    <h3 class="block-title" style="color: #ffd700;"><i class="fa-solid fa-triangle-exclamation"></i> Stock Alerts</h3>
+                </div>
+                
+                <ul class="progress-list" style="margin-top: 16px;">
+                    {% if low_stock_products %}
+                        {% for prod in low_stock_products %}
+                        <li style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
+                            <div>
+                                <div style="font-size: 0.85rem; font-weight: 600; text-transform: uppercase;">{{ prod.name }}</div>
+                                <span style="font-size: 0.75rem; color: var(--text-secondary);">Category: {{ prod.category.name }}</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span class="status-pill {% if prod.stock == 0 %}out-stock{% else %}pending{% endif %}" id="stock-pill-{{ prod.id }}" style="padding: 2px 8px; font-size: 0.7rem; border-radius: 3px;">
+                                    {% if prod.stock == 0 %}SOLD OUT{% else %}{{ prod.stock }} left{% endif %}
+                                </span>
+                                <button type="button" class="cta-button" onclick="quickRestockProduct({{ prod.id }}, 10)" style="padding: 4px 8px; font-size: 0.65rem; background-color: var(--accent-color); border: none; border-radius: 3px; font-weight: 700; height: auto; cursor: pointer; color: white; display: inline-flex; align-items: center; justify-content: center;">+10</button>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    {% else %}
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); text-align: center; padding: 12px 0;">All inventory stocks healthy! No alerts.</p>
+                    {% endif %}
+                </ul>
+            </div>
+
+            <!-- Popular Drops visual metrics progress bars -->
+            <div class="dashboard-block">
+                <div class="block-header">
+                    <h3 class="block-title">Popular Drops</h3>
+                </div>
+                
+                <div class="progress-list" style="margin-top: 20px;">
+                    {% if popular_products %}
+                        {% for item in popular_products %}
+                        <div class="progress-list-item">
+                            <div class="progress-item-meta">
+                                <span style="font-weight: 600; text-transform: uppercase;">{{ item.name }}</span>
+                                <span style="font-family: var(--font-heading); font-weight: 700;">{{ item.sales_qty }} items sold</span>
+                            </div>
+                            <div class="progress-item-bar-bg">
+                                <div class="progress-item-bar-fill" style="width: {% if order_items_qty > 0 %}{% widthratio item.sales_qty order_items_qty 100 %}{% else %}0{% endif %}%;"></div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); text-align: center; padding: 12px 0;">No sales orders items logged yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Performs an AJAX post to update order status dynamically on change
+    function updateOrderStatus(orderId, status) {
+        const formData = new FormData();
+        formData.append('order_id', orderId);
+        formData.append('status', status);
+
+        showToast(`Updating Order #${orderId} status...`, 'info');
+
+        fetch('/admin-dashboard/update-order/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                showToast(data.message, 'success');
+                // Optional: Dynamic UI color update on row or totals if desired
+            } else {
+                showToast(data.message, 'error');
+            }
+        })
+        .catch(err => {
+            console.error('Error updating order:', err);
+            showToast("Failed to update status on server.", 'error');
+        });
+    }
+
+    // Quick restock product AJAX helper
+    function quickRestockProduct(productId, amount) {
+        const formData = new FormData();
+        formData.append('product_id', productId);
+        formData.append('amount', amount);
+
+        showToast("Restocking product...", 'info');
+
+        fetch('/admin-dashboard/restock-product/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                showToast(data.message, 'success');
+                // Dynamically update the count pill on the UI
+                const pill = document.getElementById(`stock-pill-${productId}`);
+                if (pill) {
+                    pill.textContent = `${data.new_stock} left`;
+                    pill.className = "status-pill pending";
+                }
+            } else {
+                showToast(data.message, 'error');
+            }
+        })
+        .catch(err => {
+            console.error('Restock error:', err);
+            showToast("Failed to restock product.", 'error');
+        });
+    }
+
+    // Reuse CSRF helper from global app.js if needed or redefine
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+{% endblock %}

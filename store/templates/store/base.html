@@ -1,0 +1,169 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ofazyvybez Streetwears Store{% endblock %}</title>
+    <!-- Modern Typography: Outfit & Space Grotesk -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Premium custom style -->
+    <link rel="stylesheet" href="{% static 'store/css/style.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    
+    <div class="promo-banner">
+        <span>COMPLIMENTARY SHIPPING ON ALL STREETWEAR DROPS OVER ₦50,000</span>
+    </div>
+
+    <!-- Global Header -->
+    <header class="main-header">
+        <div class="header-container">
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle Navigation">
+                <i class="fa-solid fa-bars-staggered"></i>
+            </button>
+
+            <!-- Brand Logo -->
+            <a href="{% url 'home' %}" class="logo">
+                OFAZY<span class="accent-text">VYBEZ</span> <span class="logo-sub">STREETWEARS</span>
+            </a>
+
+            <!-- Desktop Navigation -->
+            <nav class="desktop-nav">
+                <ul>
+                    <li><a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a></li>
+                    <li><a href="{% url 'shop' %}" class="{% if request.resolver_match.url_name == 'shop' %}active{% endif %}">Shop All</a></li>
+                    <li><a href="{% url 'about' %}" class="{% if request.resolver_match.url_name == 'about' %}active{% endif %}">About Philosophy</a></li>
+                    <li><a href="{% url 'contact' %}" class="{% if request.resolver_match.url_name == 'contact' %}active{% endif %}">Contact Concierge</a></li>
+                    {% if user.is_staff %}
+                    <li><a href="{% url 'admin_dashboard' %}" class="admin-badge"><i class="fa-solid fa-gauge-high"></i> Dashboard</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+
+            <!-- Action Utilities -->
+            <div class="nav-utilities">
+                <!-- Search Trigger -->
+                <div class="header-search-container">
+                    <form action="{% url 'shop' %}" method="GET" class="search-form">
+                        <input type="text" name="search" placeholder="Search sneakers, tees..." value="{{ request.GET.search|default:'' }}">
+                        <button type="submit" aria-label="Search"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </form>
+                </div>
+
+                <!-- Account -->
+                {% if user.is_authenticated %}
+                    <a href="{% url 'logout' %}" class="utility-link" title="Logout ({{ user.username }})"><i class="fa-solid fa-right-from-bracket"></i></a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="utility-link" title="Login"><i class="fa-solid fa-user"></i></a>
+                {% endif %}
+
+                <!-- Cart Icon with dynamic bubble -->
+                <a href="{% url 'cart' %}" class="cart-trigger" id="cartTrigger">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Slide-in Mobile Navigation Overlay -->
+    <div class="mobile-nav-overlay" id="mobileNavOverlay">
+        <div class="mobile-nav-content">
+            <button class="mobile-close" id="mobileClose"><i class="fa-solid fa-xmark"></i></button>
+            <div class="mobile-logo">
+                OFAZY<span class="accent-text">VYBEZ</span>
+            </div>
+            <ul class="mobile-nav-links">
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'shop' %}">Shop All Drops</a></li>
+                <li><a href="{% url 'about' %}">About Philosophy</a></li>
+                <li><a href="{% url 'contact' %}">Contact Concierge</a></li>
+                {% if user.is_staff %}
+                <li class="admin-divider"><a href="{% url 'admin_dashboard' %}"><i class="fa-solid fa-gauge-high"></i> Staff Dashboard</a></li>
+                {% endif %}
+            </ul>
+            <div class="mobile-nav-footer">
+                {% if user.is_authenticated %}
+                    <p class="user-greeting">Welcome, {{ user.username }}</p>
+                    <a href="{% url 'logout' %}" class="auth-btn">Sign Out</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="auth-btn">Sign In</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Dynamic Toast Notification Alert -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Main Content -->
+    <main class="main-content-wrapper">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Global Footer -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <h3 class="footer-logo">OFAZY<span class="accent-text">VYBEZ</span></h3>
+                <p>Curated high-performance streetwear. Designed for the streets, engineered for style. Redefining e-commerce through direct-to-chat checkout.</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+                    <a href="#" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h4>Drops & Catalog</h4>
+                <ul>
+                    <li><a href="{% url 'shop' %}?category=sneakers">Limited Sneakers</a></li>
+                    <li><a href="{% url 'shop' %}?category=shirts">Graphic Tees</a></li>
+                    <li><a href="{% url 'shop' %}?category=loafers">Suede Loafers</a></li>
+                    <li><a href="{% url 'shop' %}?category=jeans">Cargo Denim</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Customer Service</h4>
+                <ul>
+                    <li><a href="{% url 'about' %}">Atelier Philosophy</a></li>
+                    <li><a href="{% url 'contact' %}">Concierge Support Line</a></li>
+                    <li><a href="{% url 'shop' %}">Explore Drops</a></li>
+                </ul>
+            </div>
+            <div class="footer-newsletter">
+                <h4>Join the Vybez</h4>
+                <p>Subscribe to receive exclusive access to drop notifications, limited runs, and secret promo codes.</p>
+                <form class="newsletter-form" onsubmit="event.preventDefault(); showToast('Subscribed! Check your email for drops.', 'success');">
+                    <input type="email" placeholder="Your email address" required>
+                    <button type="submit">SUBSCRIBE</button>
+                </form>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 OFAZYVYBEZ STREETWEARS. All rights reserved. Powered by Django & WhatsApp Click-to-Chat.</p>
+        </div>
+    </footer>
+
+    <!-- App Script -->
+    <script src="{% static 'store/js/app.js' %}"></script>
+    <script>
+        // Set up global URLs to use in static js
+        window.cartUrl = "{% url 'cart_api' %}";
+        window.addToCartUrl = "{% url 'add_to_cart' %}";
+        
+        // Fetch cart quantity on page load to update bubble
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchCartCount();
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

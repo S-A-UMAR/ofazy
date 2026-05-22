@@ -1,0 +1,210 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block title %}{{ product.name }} — OFAZYVYBEZ STREETWEARS{% endblock %}
+
+{% block content %}
+<div class="product-detail-wrapper">
+    
+    <!-- Detail Split Layout -->
+    <div class="product-detail-grid">
+        
+        <!-- Left Image Showcase Gallery -->
+        <div class="detail-gallery">
+            <div class="main-image-display">
+                <!-- Stock Badge overlay -->
+                {% if product.stock <= 0 %}
+                    <span class="badge-out-of-stock" style="font-size: 0.8rem; padding: 6px 14px;">SOLD OUT</span>
+                {% elif product.stock <= 5 %}
+                    <span class="badge-featured" style="background-color: #ffd700; color: #000; font-size: 0.8rem; padding: 6px 14px;">LOW STOCK</span>
+                {% endif %}
+                <img src="{{ product.image_url }}" id="mainProductImage" alt="{{ product.name }}">
+            </div>
+            
+            <!-- Optional thumbnails strip using alternative source images -->
+            <div class="image-thumbnails-strip">
+                <div class="img-thumb active" data-image-src="{{ product.image_url }}">
+                    <img src="{{ product.image_url }}" alt="Main View">
+                </div>
+                <div class="img-thumb" data-image-src="https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=600&auto=format&fit=crop">
+                    <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=600&auto=format&fit=crop" alt="Alternative Angle 1">
+                </div>
+                <div class="img-thumb" data-image-src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=600&auto=format&fit=crop">
+                    <img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=600&auto=format&fit=crop" alt="Alternative Angle 2">
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Options & Purchase Controls Panel -->
+        <div class="detail-info-box">
+            
+            <span class="detail-category">{{ product.category.name }}</span>
+            <h1 class="detail-title">{{ product.name }}</h1>
+            
+            <div class="detail-price">
+                ₦{{ product.price }}
+            </div>
+
+            <!-- Stock status label -->
+            <div class="stock-status-alert" style="margin-bottom: 24px;">
+                {% if product.stock > 5 %}
+                    <span class="status-dot in-stock"></span>
+                    <span style="color: var(--accent-neon-green); font-weight: 600;">Piece in stock ({{ product.stock }} items remaining)</span>
+                {% elif product.stock > 0 %}
+                    <span class="status-dot low-stock"></span>
+                    <span style="color: #ffd700; font-weight: 600;">Very limited drop! (Only {{ product.stock }} items left)</span>
+                {% else %}
+                    <span class="status-dot out-stock"></span>
+                    <span style="color: #e53e3e; font-weight: 600;">Drop fully sold out. Contact support for restock info.</span>
+                {% endif %}
+            </div>
+
+            <p class="detail-desc">
+                {{ product.description }}
+            </p>
+
+            <!-- AJAX Form for item variations selection -->
+            {% if product.stock > 0 %}
+            <form id="addToCartForm">
+                <input type="hidden" id="productId" value="{{ product.id }}">
+
+                <div class="detail-options-container">
+                    
+                    <!-- Sizing Selector Swatches -->
+                    {% if product.get_size_list %}
+                    <div class="option-group">
+                        <h4 class="option-label">Select Size</h4>
+                        <div class="detail-size-swatches">
+                            {% for size in product.get_size_list %}
+                            <div class="size-swatch-chip">
+                                <input type="radio" name="size" id="detail-size-{{ size }}" value="{{ size }}">
+                                <label for="detail-size-{{ size }}" class="size-chip-label">{{ size }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Color Selector Swatches -->
+                    {% if product.get_color_list %}
+                    <div class="option-group" style="margin-top: 24px;">
+                        <h4 class="option-label">Select Colorway</h4>
+                        <div class="detail-color-swatches">
+                            {% for color in product.get_color_list %}
+                            <div class="color-swatch-chip">
+                                <input type="radio" name="color" id="detail-color-{{ color }}" value="{{ color }}">
+                                <label for="detail-color-{{ color }}" class="color-chip-label">{{ color }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Quantity counter selector -->
+                    <div class="option-group" style="margin-top: 28px;">
+                        <h4 class="option-label">Quantity</h4>
+                        <div class="qty-adjust-wrapper">
+                            <button type="button" class="qty-btn" id="btnQtyMinus"><i class="fa-solid fa-minus"></i></button>
+                            <input type="number" id="qtyInput" class="qty-input-box" value="1" min="1" max="{{ product.stock }}" readonly>
+                            <button type="button" class="qty-btn" id="btnQtyPlus"><i class="fa-solid fa-plus"></i></button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- CTA Action Row buttons -->
+                <div class="detail-cta-row">
+                    <button type="submit" class="btn-add-cart">
+                        <i class="fa-solid fa-bag-shopping"></i> ADD TO BAG
+                    </button>
+                    
+                    <button type="button" class="btn-whatsapp-buy" onclick="triggerImmediateWhatsAppCheckout()">
+                        <i class="fa-brands fa-whatsapp"></i> CONCIERGE BUY
+                    </button>
+                </div>
+
+            </form>
+            {% else %}
+            <!-- Sold out CTA -->
+            <div class="detail-cta-row">
+                <button type="button" class="btn-whatsapp-buy" style="background-color: #3f3f46; box-shadow: none;" onclick="window.location.href='https://api.whatsapp.com/send?phone=+1234567890&text=Hi%2C+I+want+to+inquire+about+restocking+{{ product.name|urlencode }}'">
+                    <i class="fa-brands fa-whatsapp"></i> REQUEST RESTOCK ON WHATSAPP
+                </button>
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+    
+    <!-- Related items suggestions grid -->
+    {% if related_products %}
+    <section class="section-header" style="margin-top: 100px;">
+        <div>
+            <h2 class="section-title">YOU MIGHT ALSO LIKE</h2>
+        </div>
+    </section>
+
+    <div class="products-grid" style="margin-bottom: 80px;">
+        {% for rel in related_products %}
+        <div class="product-card">
+            <div class="product-image-box">
+                <img src="{{ rel.image_url }}" alt="{{ rel.name }}" loading="lazy">
+                <div class="product-actions-overlay">
+                    <a href="{% url 'product_detail' rel.slug %}" class="action-btn-mini"><i class="fa-solid fa-eye"></i></a>
+                </div>
+            </div>
+            <div class="product-info-box">
+                <span class="product-cat">{{ rel.category.name }}</span>
+                <a href="{% url 'product_detail' rel.slug %}" class="product-name">{{ rel.name }}</a>
+                <div class="product-price-row">
+                    <span class="product-price">₦{{ rel.price }}</span>
+                    <a href="{% url 'product_detail' rel.slug %}" class="view-details-btn">VIEW <i class="fa-solid fa-chevron-right"></i></a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Performs an instant direct WhatsApp checkout for this single product item
+    function triggerImmediateWhatsAppCheckout() {
+        const sizeChecked = document.querySelector('input[name="size"]:checked');
+        const colorChecked = document.querySelector('input[name="color"]:checked');
+        
+        const hasSizes = document.querySelector('input[name="size"]') !== null;
+        const hasColors = document.querySelector('input[name="color"]') !== null;
+
+        if (hasSizes && !sizeChecked) {
+            showToast("Please select a Size first.", "error");
+            return;
+        }
+
+        if (hasColors && !colorChecked) {
+            showToast("Please select a Color first.", "error");
+            return;
+        }
+
+        const qty = parseInt(document.getElementById('qtyInput').value) || 1;
+        const size = sizeChecked ? sizeChecked.value : 'One Size';
+        const color = colorChecked ? colorChecked.value : 'Default';
+        const productName = "{{ product.name }}";
+        const unitPrice = parseFloat("{{ product.price }}") || 0;
+        const totalValue = (unitPrice * qty).toFixed(2);
+        
+        const messageBody = `Hi OFAZYVYBEZ! ⚡️ I'd like to order directly:
+- ${qty}x ${productName} (Size: ${size} / Color: ${color}) @ ₦${unitPrice.toLocaleString('en-US', {minimumFractionDigits: 2})}
+
+💰 *Total Order Value:* ₦${parseFloat(totalValue).toLocaleString('en-US', {minimumFractionDigits: 2})}
+
+Please confirm my order and share payment instructions!`;
+
+        const encodedMsg = encodeURIComponent(messageBody);
+        window.location.href = `https://api.whatsapp.com/send?phone=+1234567890&text=${encodedMsg}`;
+    }
+</script>
+{% endblock %}

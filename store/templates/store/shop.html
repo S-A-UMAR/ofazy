@@ -1,0 +1,185 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block title %}Shop the Drops — OFAZYVYBEZ STREETWEARS{% endblock %}
+
+{% block content %}
+<div class="shop-page-wrapper">
+    
+    <!-- Catalog Top Title Header -->
+    <div class="catalog-header">
+        <h1 class="catalog-title-text">
+            {% if request.GET.category %}
+                {{ request.GET.category|upper }} DROP
+            {% elif search_query %}
+                SEARCH RESULTS FOR "{{ search_query|upper }}"
+            {% else %}
+                ALL DROP COLLECTIONS
+            {% endif %}
+            <span>({{ product_count }} items available)</span>
+        </h1>
+        
+        <!-- Sorting dropdown trigger -->
+        <div class="catalog-sorting-action">
+            <label for="sortSelect" style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-secondary); margin-right: 8px;">Sort by:</label>
+            <select id="sortSelect" class="catalog-sort-select" onchange="applySorting(this.value)">
+                <option value="newest" {% if selected_sort == 'newest' %}selected{% endif %}>New Releases</option>
+                <option value="price_asc" {% if selected_sort == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+                <option value="price_desc" {% if selected_sort == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Mobile Quick Filter Toggle Bar -->
+    <div class="mobile-filter-bar">
+        <button class="mobile-filter-trigger" id="mobileFilterBtn" onclick="toggleMobileFilters()">
+            <i class="fa-solid fa-sliders"></i> Adjust Filters / Sizes
+        </button>
+    </div>
+
+    <!-- Main Shop Layout Split Grid -->
+    <div class="shop-grid-layout">
+        
+        <!-- Left Filter Panel Drawer -->
+        <aside class="filter-panel" id="filterPanel">
+            <form action="{% url 'shop' %}" method="GET" id="filterForm">
+                
+                <!-- Preserve active search query if present -->
+                {% if search_query %}
+                    <input type="hidden" name="search" value="{{ search_query }}">
+                {% endif %}
+                <!-- Preserve active sorting selection -->
+                <input type="hidden" name="sort" id="filterSortInput" value="{{ selected_sort }}">
+
+                <!-- Category selector -->
+                <div class="filter-section">
+                    <h3 class="filter-title">Collections</h3>
+                    <ul class="filter-list">
+                        <li>
+                            <label class="filter-checkbox-label">
+                                <input type="radio" name="category" value="" {% if not selected_category %}checked{% endif %} onchange="submitFilters()">
+                                <span class="custom-checkbox" style="border-radius: 50%;"></span>
+                                <span>All Drops</span>
+                            </label>
+                        </li>
+                        {% for cat in categories %}
+                        <li>
+                            <label class="filter-checkbox-label">
+                                <input type="radio" name="category" value="{{ cat.slug }}" {% if selected_category == cat.slug %}checked{% endif %} onchange="submitFilters()">
+                                <span class="custom-checkbox" style="border-radius: 50%;"></span>
+                                <span>{{ cat.name }}</span>
+                            </label>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <!-- Sizing Swatches Checkbox Filter -->
+                <div class="filter-section">
+                    <h3 class="filter-title">Filter by Size</h3>
+                    <div class="size-swatches-grid">
+                        {% for size in all_sizes %}
+                        <div class="size-swatch-box">
+                            <input type="radio" name="size" id="size-{{ size }}" value="{{ size }}" {% if selected_size == size %}checked{% endif %} onchange="submitFilters()">
+                            <label for="size-{{ size }}" class="size-swatch-label">{{ size }}</label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Colors swatches filter -->
+                <div class="filter-section">
+                    <h3 class="filter-title">Filter by Color</h3>
+                    <div class="color-swatches-list">
+                        {% for color in all_colors %}
+                        <div class="color-swatch-pill">
+                            <input type="radio" name="color" id="color-{{ color }}" value="{{ color }}" {% if selected_color == color %}checked{% endif %} onchange="submitFilters()">
+                            <label for="color-{{ color }}" class="color-pill-label">
+                                <span class="color-dot-indicator" style="background-color: {% if color == 'Ice White' or color == 'Off-White' %}#ffffff{% elif color == 'Vapor Orange' %}#ff4500{% elif color == 'Charcoal Grey' %}#4b5563{% elif color == 'Midnight Black' or color == 'Stealth Black' %}#000000{% elif color == 'Sand Beige' or color == 'Camel Suede' %}#d2b48c{% else %}#ffffff{% endif %}; width: 8px; height: 8px; border-radius: 50%; display: inline-block; border: 1px solid rgba(255,255,255,0.2);"></span>
+                                {{ color }}
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Filter Action triggers -->
+                <div class="filter-section" style="border-bottom: none;">
+                    <a href="{% url 'shop' %}" class="filter-action-btn" style="display: block; text-align: center; line-height: 1;">Clear all filters</a>
+                </div>
+
+            </form>
+        </aside>
+
+        <!-- Right Product grid catalog -->
+        <div class="products-grid">
+            {% if products %}
+                {% for product in products %}
+                <div class="product-card">
+                    {% if product.stock <= 0 %}
+                        <span class="badge-out-of-stock">SOLD OUT</span>
+                    {% elif product.is_featured %}
+                        <span class="badge-featured">HOT DROP</span>
+                    {% endif %}
+
+                    <div class="product-image-box">
+                        <img src="{{ product.image_url }}" alt="{{ product.name }}" loading="lazy">
+                        <div class="product-actions-overlay">
+                            <a href="{% url 'product_detail' product.slug %}" class="action-btn-mini" title="Select variations"><i class="fa-solid fa-eye"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="product-info-box">
+                        <span class="product-cat">{{ product.category.name }}</span>
+                        <a href="{% url 'product_detail' product.slug %}" class="product-name">{{ product.name }}</a>
+                        
+                        <div class="product-price-row">
+                            <span class="product-price">₦{{ product.price }}</span>
+                            <a href="{% url 'product_detail' product.slug %}" class="view-details-btn">
+                                VIEW PIECE <i class="fa-solid fa-chevron-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <!-- Empty State display -->
+                <div class="empty-catalog-state">
+                    <div class="empty-icon"><i class="fa-solid fa-store-slash"></i></div>
+                    <h3>No Pieces Found</h3>
+                    <p>We couldn't find any streetwear drops matching your active search terms or size/color filters. Try adjusting your filters or search keywords.</p>
+                    <a href="{% url 'shop' %}" class="cta-button" style="padding: 12px 28px; font-size: 0.85rem;">RESET FILTERS</a>
+                </div>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Submits the filter form dynamically when filters are clicked
+    function submitFilters() {
+        document.getElementById('filterForm').submit();
+    }
+
+    // Connects sorting select options with hidden filter input
+    function applySorting(sortValue) {
+        document.getElementById('filterSortInput').value = sortValue;
+        submitFilters();
+    }
+
+    // Toggles mobile filter panel display drawer
+    function toggleMobileFilters() {
+        const filterPanel = document.getElementById('filterPanel');
+        if (filterPanel) {
+            filterPanel.classList.toggle('mobile-visible');
+            if (filterPanel.classList.contains('mobile-visible')) {
+                // Add a close button if needed or background blur
+                showToast("Filters expanded. Make selections.", "info");
+            }
+        }
+    }
+</script>
+{% endblock %}

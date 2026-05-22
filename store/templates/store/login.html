@@ -1,0 +1,41 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block title %}Sign In — OFAZYVYBEZ{% endblock %}
+
+{% block content %}
+<div class="auth-page-wrapper">
+    <div class="auth-form-panel">
+        
+        <h2 class="auth-form-title">SIGN IN</h2>
+        <p class="auth-form-subtitle">Enter your username and password below to access the ofazyvybez store and drops.</p>
+        
+        <form method="POST">
+            {% csrf_token %}
+            
+            {% if form.errors %}
+                <div style="background-color: rgba(229, 62, 62, 0.15); border: 1px solid rgba(229, 62, 62, 0.3); color: #e53e3e; padding: 12px; border-radius: 4px; font-size: 0.85rem; margin-bottom: 20px; text-align: center;">
+                    Invalid username or password. Try again!
+                </div>
+            {% endif %}
+
+            <div class="input-field-group">
+                <label for="id_username">Username</label>
+                <input type="text" name="username" id="id_username" placeholder="Username" required>
+            </div>
+
+            <div class="input-field-group">
+                <label for="id_password">Password</label>
+                <input type="password" name="password" id="id_password" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" class="auth-submit-btn">ACCESS THE DROP</button>
+        </form>
+
+        <p class="auth-redirect-link">
+            New to ofazyvybez? <a href="{% url 'register' %}">Join the community</a>
+        </p>
+
+    </div>
+</div>
+{% endblock %}

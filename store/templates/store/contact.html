@@ -1,0 +1,33 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block title %}Concierge Support — OFAZYVYBEZ{% endblock %}
+
+{% block content %}
+<div class="product-detail-wrapper" style="max-width: 800px; margin: 80px auto; text-align: center;">
+    <span class="detail-category" style="letter-spacing: 0.25em;">GET IN TOUCH</span>
+    <h1 class="detail-title" style="font-size: 3rem; margin-top: 10px; margin-bottom: 40px;">CONCIERGE OFFICE</h1>
+    
+    <div style="line-height: 1.8; color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 50px;">
+        <p style="margin-bottom: 30px;">
+            Have questions regarding sizing, custom shipping fees, or pre-ordering upcoming drops? Reach out directly to our concierge team.
+        </p>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; margin-top: 40px; text-align: left;">
+            <div style="background-color: var(--bg-card); border: 1px solid var(--border-color); padding: 30px; border-radius: var(--border-radius);">
+                <div style="font-size: 2rem; color: var(--accent-color); margin-bottom: 12px;"><i class="fa-brands fa-whatsapp"></i></div>
+                <h3 style="font-family: var(--font-heading); text-transform: uppercase; margin-bottom: 8px; color: white;">WhatsApp Chat</h3>
+                <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 16px;">Direct chat support for orders & shipping.</p>
+                <a href="https://api.whatsapp.com/send?phone=+1234567890&text=Hi%20OFAZYVYBEZ!%20I%20have%20an%20inquiry%20regarding%20the%20drops." target="_blank" style="color: var(--accent-color); font-weight: 600; font-size: 0.9rem;">Chat now <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+
+            <div style="background-color: var(--bg-card); border: 1px solid var(--border-color); padding: 30px; border-radius: var(--border-radius);">
+                <div style="font-size: 2rem; color: var(--accent-color); margin-bottom: 12px;"><i class="fa-solid fa-envelope"></i></div>
+                <h3 style="font-family: var(--font-heading); text-transform: uppercase; margin-bottom: 8px; color: white;">Email Support</h3>
+                <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 16px;">General inquiries and brand partnerships.</p>
+                <a href="mailto:support@ofazyvybez.com" style="color: var(--accent-color); font-weight: 600; font-size: 0.9rem;">Send Email <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

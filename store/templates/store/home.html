@@ -1,0 +1,116 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block title %}OFAZYVYBEZ STREETWEARS — Premium Streetwear Drop{% endblock %}
+
+{% block content %}
+<!-- Full-width visual Hero Banner Slider -->
+<section class="hero-slider">
+    <div class="hero-content">
+        <span class="hero-tag">OFAZYVYBEZ drop 01 / 2026</span>
+        <h1 class="hero-title">STREETWEARS<br>COLLECTION</h1>
+        <p class="hero-desc">Heavyweight premium threads, custom-knit graphic polos, and hand-finished suede split-toe loafers. Engineered for the culture.</p>
+        <a href="{% url 'shop' %}" class="cta-button">
+            DISCOVER THE DROP <i class="fa-solid fa-arrow-right-long"></i>
+        </a>
+    </div>
+</section>
+
+<!-- Streetwear mini category grids -->
+<section class="section-header">
+    <div>
+        <h2 class="section-title">THE ARCHIVE</h2>
+    </div>
+    <a href="{% url 'shop' %}" class="section-link">Shop all archive</a>
+</section>
+
+<section class="categories-scroll">
+    {% for cat in categories %}
+    <a href="{% url 'shop' %}?category={{ cat.slug }}" class="category-card-mini">
+        <div class="category-icon-box">
+            {% if cat.slug == 'sneakers' %}
+                <i class="fa-solid fa-shoe-prints"></i>
+            {% elif cat.slug == 'shirts' %}
+                <i class="fa-solid fa-shirt"></i>
+            {% elif cat.slug == 'loafers' %}
+                <i class="fa-solid fa-user-tie"></i>
+            {% elif cat.slug == 'polos' %}
+                <i class="fa-solid fa-heading"></i>
+            {% elif cat.slug == 'jeans' %}
+                <i class="fa-solid fa-scissors"></i>
+            {% elif cat.slug == 'slides' %}
+                <i class="fa-solid fa-mattress-pillow"></i>
+            {% else %}
+                <i class="fa-solid fa-gem"></i>
+            {% endif %}
+        </div>
+        <span class="category-name-mini">{{ cat.name }}</span>
+    </a>
+    {% endfor %}
+</section>
+
+<!-- Featured Products Showcase -->
+<section class="section-header">
+    <div>
+        <h2 class="section-title">TRENDING PIECES</h2>
+    </div>
+    <a href="{% url 'shop' %}" class="section-link">View full catalog</a>
+</section>
+
+<div class="product-grid-container">
+    <div class="products-grid">
+        {% for product in featured_products %}
+        <div class="product-card">
+            <!-- Featured Badge or stock alert -->
+            {% if product.stock <= 0 %}
+                <span class="badge-out-of-stock">SOLD OUT</span>
+            {% elif product.is_featured %}
+                <span class="badge-featured">HOT DROP</span>
+            {% endif %}
+
+            <div class="product-image-box">
+                <img src="{{ product.image_url }}" alt="{{ product.name }}" loading="lazy">
+                
+                <!-- Quick hover options overlay -->
+                <div class="product-actions-overlay">
+                    <a href="{% url 'product_detail' product.slug %}" class="action-btn-mini" title="Select Variants"><i class="fa-solid fa-eye"></i></a>
+                </div>
+            </div>
+
+            <div class="product-info-box">
+                <span class="product-cat">{{ product.category.name }}</span>
+                <a href="{% url 'product_detail' product.slug %}" class="product-name">{{ product.name }}</a>
+                
+                <div class="product-price-row">
+                    <span class="product-price">₦{{ product.price }}</span>
+                    <a href="{% url 'product_detail' product.slug %}" class="view-details-btn">
+                        SELECT <i class="fa-solid fa-chevron-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Trust & Security Services Banner -->
+<section class="trust-banner">
+    <div class="trust-container">
+        <div class="trust-item">
+            <div class="trust-icon"><i class="fa-brands fa-whatsapp"></i></div>
+            <h3>WhatsApp Checkout</h3>
+            <p>Skip complicated card entry. Arrange custom payment and delivery directly with our concierge agents via WhatsApp chat.</p>
+        </div>
+        <div class="trust-item">
+            <div class="trust-icon"><i class="fa-solid fa-truck-fast"></i></div>
+            <h3>Express Shipping</h3>
+            <p>Fast track delivery within 2-5 business days. Safe, secure package monitoring details updated in real-time.</p>
+        </div>
+        <div class="trust-item">
+            <div class="trust-icon"><i class="fa-solid fa-rotate-left"></i></div>
+            <h3>Seamless Returns</h3>
+            <p>We stand behind the quality of ofazyvybez pieces. Request returns or exchanges easily by replying directly on WhatsApp.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

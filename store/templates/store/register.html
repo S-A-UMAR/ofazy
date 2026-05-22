@@ -1,0 +1,49 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block title %}Join the Community — OFAZYVYBEZ{% endblock %}
+
+{% block content %}
+<div class="auth-page-wrapper">
+    <div class="auth-form-panel">
+        
+        <h2 class="auth-form-title">JOIN US</h2>
+        <p class="auth-form-subtitle">Create a community account to save orders history and get early drops alerts.</p>
+        
+        <form method="POST">
+            {% csrf_token %}
+            
+            {% if form.errors %}
+                <div style="background-color: rgba(229, 62, 62, 0.15); border: 1px solid rgba(229, 62, 62, 0.3); color: #e53e3e; padding: 12px; border-radius: 4px; font-size: 0.85rem; margin-bottom: 20px; text-align: center; line-height: 1.4;">
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            {{ error }}<br>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        {{ error }}<br>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% for field in form %}
+            <div class="input-field-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                <!-- Render standard fields customized via CSS -->
+                <input type="{% if 'password' in field.name %}password{% else %}text{% endif %}" name="{{ field.name }}" id="{{ field.id_for_label }}" required>
+                {% if field.help_text %}
+                    <span style="font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; display: block; line-height: 1.2;">{{ field.help_text }}</span>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <button type="submit" class="auth-submit-btn" style="margin-top: 24px;">CREATE ACCOUNT</button>
+        </form>
+
+        <p class="auth-redirect-link">
+            Already have an account? <a href="{% url 'login' %}">Sign in here</a>
+        </p>
+
+    </div>
+</div>
+{% endblock %}
