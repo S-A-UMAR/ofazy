@@ -1,7 +1,7 @@
 {% extends 'store/base.html' %}
 {% load static %}
 
-{% block title %}{{ product.name }} — OFAZYVYBEZ STREETWEARS{% endblock %}
+{% block title %}{{ product.name }} — OFAZYVYBEZ STREETWEAR STORES{% endblock %}
 
 {% block content %}
 <div class="product-detail-wrapper">
@@ -127,7 +127,7 @@
             {% else %}
             <!-- Sold out CTA -->
             <div class="detail-cta-row">
-                <button type="button" class="btn-whatsapp-buy" style="background-color: #3f3f46; box-shadow: none;" onclick="window.location.href='https://api.whatsapp.com/send?phone=+1234567890&text=Hi%2C+I+want+to+inquire+about+restocking+{{ product.name|urlencode }}'">
+                <button type="button" class="btn-whatsapp-buy" style="background-color: #3f3f46; box-shadow: none;" onclick="window.location.href='https://api.whatsapp.com/send?phone=+2348131695735&text=Hi%2C+I+want+to+inquire+about+restocking+{{ product.name|urlencode }}'">
                     <i class="fa-brands fa-whatsapp"></i> REQUEST RESTOCK ON WHATSAPP
                 </button>
             </div>
@@ -204,7 +204,7 @@
 Please confirm my order and share payment instructions!`;
 
         const encodedMsg = encodeURIComponent(messageBody);
-        window.location.href = `https://api.whatsapp.com/send?phone=+1234567890&text=${encodedMsg}`;
+        window.location.href = `https://api.whatsapp.com/send?phone=+2348131695735&text=${encodedMsg}`;
     }
 </script>
 {% endblock %}

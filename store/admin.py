@@ -1,19 +1,32 @@
 from django.contrib import admin
+from django.utils.html import format_html
 from .models import Category, Product, Order, OrderItem
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug')
+    list_display = ('image_preview', 'name', 'slug')
     prepopulated_fields = {'slug': ('name',)}
     search_fields = ('name',)
 
+    def image_preview(self, obj):
+        if obj.image_url:
+            return format_html('<img src="{}" style="width: 45px; height: 45px; object-fit: cover; border-radius: 4px;" />', obj.image_url)
+        return "No Image"
+    image_preview.short_description = 'Image'
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category', 'price', 'stock', 'is_featured')
+    list_display = ('image_preview', 'name', 'category', 'price', 'stock', 'is_featured')
     list_filter = ('category', 'is_featured')
     list_editable = ('price', 'stock', 'is_featured')
     prepopulated_fields = {'slug': ('name',)}
     search_fields = ('name', 'description')
+
+    def image_preview(self, obj):
+        if obj.image_url:
+            return format_html('<img src="{}" style="width: 45px; height: 45px; object-fit: cover; border-radius: 4px;" />', obj.image_url)
+        return "No Image"
+    image_preview.short_description = 'Image'
 
 class OrderItemInline(admin.TabularInline):
     model = OrderItem

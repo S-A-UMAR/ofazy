@@ -5,7 +5,14 @@ class Category(models.Model):
     name = models.CharField(max_length=100)
     slug = models.SlugField(max_length=120, unique=True)
     description = models.TextField(blank=True, null=True)
-    image_url = models.CharField(max_length=500, blank=True, null=True)
+    image = models.ImageField(upload_to='categories/', blank=True, null=True)
+    image_url_link = models.CharField(max_length=500, blank=True, null=True, help_text="Alternative external image URL")
+
+    @property
+    def image_url(self):
+        if self.image:
+            return self.image.url
+        return self.image_url_link or ""
 
     class Meta:
         verbose_name_plural = "Categories"
@@ -21,8 +28,15 @@ class Product(models.Model):
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     stock = models.IntegerField(default=0)
-    image_url = models.CharField(max_length=500, blank=True, null=True)
+    image = models.ImageField(upload_to='products/', blank=True, null=True)
+    image_url_link = models.CharField(max_length=500, blank=True, null=True, help_text="Alternative external image URL")
     is_featured = models.BooleanField(default=False)
+
+    @property
+    def image_url(self):
+        if self.image:
+            return self.image.url
+        return self.image_url_link or ""
     
     # Comma-separated options, e.g., "Black,White,Orange"
     color_variants = models.CharField(max_length=200, blank=True, null=True, help_text="Comma-separated colors")

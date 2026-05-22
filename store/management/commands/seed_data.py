@@ -54,7 +54,7 @@ class Command(BaseCommand):
                 defaults={
                     'name': cat['name'],
                     'description': cat['description'],
-                    'image_url': cat['image_url']
+                    'image_url_link': cat['image_url']
                 }
             )
             categories[cat['name']] = obj
@@ -197,7 +197,7 @@ class Command(BaseCommand):
                     'description': prod['description'],
                     'price': prod['price'],
                     'stock': prod['stock'],
-                    'image_url': prod['image_url'],
+                    'image_url_link': prod['image_url'],
                     'is_featured': prod['is_featured'],
                     'color_variants': prod['color_variants'],
                     'size_variants': prod['size_variants']

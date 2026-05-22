@@ -356,7 +356,7 @@ def checkout_whatsapp(request):
         message_items.append(f"- {qty}x {item['name']}{variation_str} @ ₦{item['price']}")
         
     # 3. Create the pre-filled URLencoded WhatsApp click-to-chat API string
-    store_whatsapp_number = "+1234567890" # Target store number (e.g. client's business phone)
+    store_whatsapp_number = "+2348131695735" # Store WhatsApp business number
     
     message_body = (
         f"🚨 *NEW STREETWEAR DROP ORDER #{order.id}*\n\n"
