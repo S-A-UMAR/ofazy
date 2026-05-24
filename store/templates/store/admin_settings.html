@@ -1,0 +1,68 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block title %}Admin Settings — ofazyvybez streetwears store{% endblock %}
+
+{% block content %}
+<div class="dashboard-wrapper">
+    <div class="dashboard-header">
+        <h1 class="dashboard-title">
+            Staff controls
+            <span>/ Account Settings</span>
+        </h1>
+    </div>
+
+    <div class="dashboard-block" style="max-width: 600px; margin: 0 auto; padding: 30px;">
+        {% if messages %}
+        <div style="margin-bottom: 20px;">
+            {% for message in messages %}
+            <div style="padding: 10px 15px; border-radius: 4px; font-size: 0.9rem; margin-bottom: 10px; {% if message.tags == 'success' %}background: rgba(57, 255, 20, 0.1); color: var(--accent-neon-green); border: 1px solid var(--accent-neon-green);{% else %}background: rgba(255, 50, 50, 0.1); color: #ff5555; border: 1px solid #ff5555;{% endif %}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <h3 style="margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; color: white;">Update Username</h3>
+        <form method="POST" action="{% url 'admin_settings' %}" style="margin-bottom: 40px;">
+            {% csrf_token %}
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-size: 0.85rem; margin-bottom: 5px; color: var(--text-secondary);">New Username</label>
+                <input type="text" name="username" value="{{ user.username }}" required style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: white; border-radius: 4px;">
+            </div>
+            <button type="submit" name="update_username" class="cta-button" style="background: var(--accent-color); color: white; border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; border-radius: 4px;">Save Username</button>
+        </form>
+
+        <h3 style="margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; color: white;">Update Password</h3>
+        <form method="POST" action="{% url 'admin_settings' %}">
+            {% csrf_token %}
+            {% for field in password_form %}
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-size: 0.85rem; margin-bottom: 5px; color: var(--text-secondary);">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}
+                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 5px;">{{ field.help_text|safe }}</div>
+                {% endif %}
+                {% for error in field.errors %}
+                <div style="color: #ff5555; font-size: 0.8rem; margin-top: 5px;">{{ error }}</div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+            <button type="submit" name="update_password" class="cta-button" style="background: var(--accent-color); color: white; border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; border-radius: 4px;">Change Password</button>
+        </form>
+    </div>
+</div>
+
+<style>
+    /* Add basic styling for django forms rendered directly */
+    input[type="password"] {
+        width: 100%;
+        padding: 12px;
+        background: rgba(255,255,255,0.05);
+        border: 1px solid var(--border-color);
+        color: white;
+        border-radius: 4px;
+        font-family: inherit;
+    }
+</style>
+{% endblock %}

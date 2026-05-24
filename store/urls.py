@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin-dashboard/', views.admin_dashboard, name='admin_dashboard'),
     path('admin-dashboard/update-order/', views.update_order_status, name='update_order_status'),
     path('admin-dashboard/restock-product/', views.quick_restock, name='quick_restock'),
+    path('admin-dashboard/settings/', views.admin_settings, name='admin_settings'),
     
     # Auth flows
     path('login/', views.login_view, name='login'),

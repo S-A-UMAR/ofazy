@@ -1,9 +1,10 @@
 import urllib.parse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
-from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth import login, logout, authenticate, update_session_auth_hash
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib import messages
 from django.db.models import Sum, Count, Q
 from .models import Category, Product, Order, OrderItem
 
@@ -480,3 +481,32 @@ def quick_restock(request):
         'message': f'Added {amount} items to {product.name}. New stock: {product.stock}',
         'new_stock': product.stock
     })
+
+@user_passes_test(lambda u: u.is_staff)
+def admin_settings(request):
+    if request.method == 'POST':
+        if 'update_username' in request.POST:
+            new_username = request.POST.get('username')
+            if new_username:
+                request.user.username = new_username
+                request.user.save()
+                messages.success(request, 'Username updated successfully.')
+            return redirect('admin_settings')
+            
+        elif 'update_password' in request.POST:
+            password_form = PasswordChangeForm(request.user, request.POST)
+            if password_form.is_valid():
+                user = password_form.save()
+                update_session_auth_hash(request, user)
+                messages.success(request, 'Password updated successfully.')
+                return redirect('admin_settings')
+            else:
+                messages.error(request, 'Please correct the error below.')
+    else:
+        password_form = PasswordChangeForm(request.user)
+
+    context = {
+        'password_form': password_form
+    }
+    return render(request, 'store/admin_settings.html', context)
+
