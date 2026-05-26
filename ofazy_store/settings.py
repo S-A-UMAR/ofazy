@@ -107,9 +107,13 @@ DATABASES = {
     }
 }
 
-# Parse DATABASE_URL if available in production (e.g. Render PostgreSQL database)
+# Parse DATABASE_URL if available in production (e.g. Neon PostgreSQL database)
 if os.environ.get('DATABASE_URL'):
-    DATABASES['default'] = dj_database_url.config(conn_max_age=600)
+    DATABASES['default'] = dj_database_url.config(
+        conn_max_age=0,
+        conn_health_checks=True,
+        ssl_require=True
+    )
 
 
 # Password validation
