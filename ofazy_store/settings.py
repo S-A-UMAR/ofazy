@@ -27,7 +27,9 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-fallback-key-for-prod
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '.vercel.app .onrender.com localhost 127.0.0.1').split()
+ALLOWED_HOSTS = ['*']
+# In production, you should list your specific domains:
+# ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '.vercel.app .onrender.com localhost 127.0.0.1').split()
 
 CSRF_TRUSTED_ORIGINS = [
     'https://*.vercel.app',
