@@ -42,7 +42,12 @@
         
         <!-- Left Filter Panel Drawer -->
         <aside class="filter-panel" id="filterPanel">
-            <form action="{% url 'shop' %}" method="GET" id="filterForm">
+            <!-- Mobile close button -->
+            <button type="button" class="mobile-filter-close" onclick="toggleMobileFilters()" style="display: none; align-self: flex-end; font-size: 1.5rem; margin-bottom: 24px; cursor: pointer; color: white; background: none; border: none;">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            
+            <form action="{% url 'shop' %}" method="GET" id="filterForm" style="display: flex; flex-direction: column;">
                 
                 <!-- Preserve active search query if present -->
                 {% if search_query %}

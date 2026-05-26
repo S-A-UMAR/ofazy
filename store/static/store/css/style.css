@@ -210,13 +210,13 @@ input, select, textarea, button {
 
 .search-form input {
     font-size: 0.85rem;
-    width: 150px;
+    width: 140px;
     padding-right: 24px;
     transition: var(--transition-smooth);
 }
 
 .search-form input:focus {
-    width: 220px;
+    width: 200px;
 }
 
 .search-form button {
@@ -1953,16 +1953,33 @@ input, select, textarea, button {
         display: block;
     }
     
+    .header-container {
+        padding: 12px 16px;
+    }
+
+    .logo {
+        font-size: 1.2rem;
+    }
+
+    .logo-sub {
+        font-size: 0.55rem;
+    }
+
     .search-form input {
-        width: 110px;
+        width: 80px;
     }
     
     .search-form input:focus {
-        width: 150px;
+        width: 120px;
+    }
+
+    .nav-utilities {
+        gap: 12px;
     }
     
     .hero-slider {
         height: 60vh;
+        min-height: 400px;
         padding: 0 4%;
         justify-content: center;
         text-align: center;
@@ -1970,6 +1987,64 @@ input, select, textarea, button {
     
     .hero-title {
         font-size: 2.2rem;
+    }
+
+    .hero-desc {
+        font-size: 0.95rem;
+        margin-bottom: 24px;
+    }
+    
+    .section-header {
+        margin: 40px auto 24px auto;
+        padding: 0 16px;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+    }
+
+    .product-grid-container {
+        padding: 0 16px 40px 16px;
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 16px;
+    }
+
+    .product-info-box {
+        padding: 12px;
+    }
+
+    .product-name {
+        font-size: 0.95rem;
+    }
+
+    .product-price {
+        font-size: 1.1rem;
+    }
+
+    /* Show product actions on mobile by default but integrated */
+    .product-actions-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 8px;
+        background: rgba(10, 10, 10, 0.6);
+        opacity: 1;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .action-btn-mini {
+        width: 32px;
+        height: 32px;
+        font-size: 0.9rem;
+    }
+
+    .view-details-btn {
+        font-size: 0.75rem;
     }
     
     .shop-grid-layout {
@@ -1981,20 +2056,26 @@ input, select, textarea, button {
     }
     
     .filter-panel.mobile-visible {
-        display: block;
+        display: flex;
+        flex-direction: column;
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        z-index: 150;
+        z-index: 1000;
         overflow-y: auto;
-        border-radius: 0;
-        border: none;
+        background-color: var(--bg-dark);
+        padding: 40px 24px;
+    }
+
+    .filter-panel.mobile-visible .mobile-filter-close {
+        display: block !important;
     }
     
     .mobile-filter-bar {
         display: block;
+        padding: 0 16px;
     }
     
     .cart-grid-layout {
@@ -2004,6 +2085,7 @@ input, select, textarea, button {
     
     .cart-item-row {
         grid-template-columns: 80px 1fr;
+        padding: 12px;
     }
     
     .cart-item-right {
@@ -2014,9 +2096,50 @@ input, select, textarea, button {
         padding-top: 12px;
         margin-top: 8px;
     }
-    
-    .section-header {
+
+    .trust-container {
+        grid-template-columns: 1fr;
+        padding: 0 16px;
+        gap: 30px;
+    }
+
+    .trust-banner {
+        padding: 40px 0;
         margin-top: 40px;
+    }
+
+    .main-footer {
+        padding: 60px 0 30px 0;
+        margin-top: 60px;
+    }
+
+    .footer-container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        padding: 0 16px;
+    }
+}
+
+@media (max-width: 375px) {
+    .logo {
+        font-size: 1rem;
+    }
+    
+    .search-form input {
+        width: 60px;
+    }
+    
+    .search-form input:focus {
+        width: 100px;
+    }
+    
+    .nav-utilities {
+        gap: 8px;
+    }
+    
+    .promo-banner {
+        font-size: 0.7rem;
+        padding: 6px 12px;
     }
 }
 
