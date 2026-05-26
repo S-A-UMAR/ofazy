@@ -1,0 +1,7 @@
+{
+  "name": "ofazy",
+  "version": "1.0.0",
+  "scripts": {
+    "vercel-build": "bash build.sh"
+  }
+}
