@@ -21,16 +21,10 @@
                 <img src="{{ product.image_url }}" id="mainProductImage" alt="{{ product.name }}">
             </div>
             
-            <!-- Optional thumbnails strip using alternative source images -->
+            <!-- Thumbnail strip — shows product image only (additional angles can be added via admin) -->
             <div class="image-thumbnails-strip">
-                <div class="img-thumb active" data-image-src="{{ product.image_url }}">
+                <div class="img-thumb active" data-image-src="{{ product.image_url }}" title="Main view">
                     <img src="{{ product.image_url }}" alt="Main View">
-                </div>
-                <div class="img-thumb" data-image-src="https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=600&auto=format&fit=crop">
-                    <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=600&auto=format&fit=crop" alt="Alternative Angle 1">
-                </div>
-                <div class="img-thumb" data-image-src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=600&auto=format&fit=crop">
-                    <img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=600&auto=format&fit=crop" alt="Alternative Angle 2">
                 </div>
             </div>
         </div>
